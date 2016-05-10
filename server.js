@@ -6,6 +6,12 @@ var app = express();
 // Comienza un servidor
 var http = require('http').Server(app);
 
+var io = require('socket.io')(http);
+
+io.on ('connection', function (){
+	console.log('User connected via socket.io');
+});
+
 app.use(express.static(__dirname + '/public'));
 
 http.listen(PORT, function (){
