@@ -15,5 +15,5 @@ io.on ('connection', function (){
 app.use(express.static(__dirname + '/public'));
 
 http.listen(PORT, function (){
-	console.log('Server started');
+	console.log('Server started at port: ' + PORT);
 })
