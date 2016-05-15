@@ -37,9 +37,14 @@ io.on('connection', function(socket) {
 
 	socket.on('message', function(message) {
 		console.log('Message received: ' + message.text);
-		//socket.broadcast.emit ('message', message);
-		message.timestamp = moment().valueOf();
-		io.to(clientInfo[socket.id].room).emit('message', message);
+
+		if (message.text === '@currentUsers') {
+			sendCurrentUsers(socket);
+		} else {
+			//socket.broadcast.emit ('message', message);
+			message.timestamp = moment().valueOf();
+			io.to(clientInfo[socket.id].room).emit('message', message);
+		}
 	});
 
 	socket.emit('message', {
@@ -54,3 +59,24 @@ app.use(express.static(__dirname + '/public'));
 http.listen(PORT, function() {
 	console.log('Server started at port: ' + PORT);
 });
+
+function sendCurrentUsers(socket) {
+	var users = [];
+
+	if (typeof clientInfo[socket.id] === 'undefined') {
+		return;
+	}
+
+	Object.keys(clientInfo).forEach(function(socketId) {
+		var userInfo = clientInfo[socketId];
+		if (userInfo.room === clientInfo[socket.id].room) {
+			users.push(userInfo.name);
+		}
+	});
+
+	socket.emit('message', {
+		name: 'System',
+		text: 'Current users: ' + users.join(', '),
+		timestamp: moment().valueOf()
+	});
+}
