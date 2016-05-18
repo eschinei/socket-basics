@@ -16,7 +16,7 @@ socket.on('connect', function() {
 socket.on('message', function(message) {
 	console.log('Mensaje recibido: ' + message.text);
 	var timestampMoment = moment.utc(message.timestamp);
-	jQuery('.messages').append('<p>' +  message.name + ': ' + timestampMoment.format('h:mma') + ': ' + message.text + '</p>');
+	jQuery('.messages').append('<li class="list-group-item"> <p>' +  message.name + ': ' + timestampMoment.format('h:mma') + ': ' + message.text + '</p> </li>');
 });
 
 // Handles submitting of new message
